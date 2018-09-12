@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import PreGame              from './PreGame';
-import GameBoard            from './GameBoard';
-import GameOver             from './GameOver';
+import PreGame              from './components/PreGame';
+import GameBoard            from './components/GameBoard';
+import GameOver             from './components/GameOver';
 import referee              from './referee';
 import computerMove         from './computerMove';
 
@@ -12,25 +12,27 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            preGame: true,
-            currentPlayer: '',
-            board: [
-                ['','',''],
-                ['','',''],
-                ['','','']
-            ],
-            moveCount: 1,
-            gameOver: false,
-        }
+        this.state = this.getInitialState();
 
         this.handleMoveClick = this.handleMoveClick.bind(this);
-        this.setPlayers = this.setPlayers.bind(this);
-        this.startOver = this.startOver.bind(this);
+        this.setPlayers      = this.setPlayers.bind(this);
+        this.startOver       = this.startOver.bind(this);
     }
 
-    setPlayers = event => this.setState({ 
-        preGame: false, 
+    getInitialState = () => ({
+        preGame: true,
+        currentPlayer: '',
+        board: [
+            [null, null, null],
+            [null, null, null],
+            [null, null, null]
+        ],
+        moveCount: 1,
+        gameOver: false,
+    });
+
+    setPlayers = event => this.setState({
+        preGame: false,
         players: event.target.id
     });
 
@@ -58,17 +60,7 @@ class App extends Component {
     }
 
     startOver = () => (
-        this.setState({
-            preGame: true,
-            currentPlayer: '',
-            board: [
-                ['','',''],
-                ['','',''],
-                ['','','']
-            ],
-            moveCount: 1,
-            gameOver: false,
-        })
+        this.setState(this.getInitialState())
     );
 
     componentDidUpdate = () => {
@@ -81,8 +73,8 @@ class App extends Component {
 
     render = () => this.state.preGame ?
         <PreGame setPlayers={this.setPlayers} /> :
-        this.state.gameOver ? 
-            <GameOver moveCount={this.state.moveCount} currentPlayer={this.state.currentPlayer} startOver={this.startOver} /> : 
+        this.state.gameOver ?
+            <GameOver moveCount={this.state.moveCount} currentPlayer={this.state.currentPlayer} startOver={this.startOver} /> :
             <GameBoard state={this.state.board} makeMove={this.handleMoveClick} />;
 }
 
