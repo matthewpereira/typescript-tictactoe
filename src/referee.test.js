@@ -2,7 +2,7 @@ import { validRow, validColumn, validDiagonal, referee, areEqual } from './refer
 
 const winningRow = [
     ['x','x','x'],
-    ['o','o',''],
+    ['o','o',null],
     [null,null,null]
 ];
 const nonWinningRow = [

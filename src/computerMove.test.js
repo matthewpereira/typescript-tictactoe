@@ -1,7 +1,7 @@
 import { computerMove, validateMove, getRandomInt } from './computerMove';
 
 const board = [
-    ['x','o',''],
+    ['x','o',null],
     ['x','o','x'],
     ['o','x','o']
 ];
@@ -22,7 +22,7 @@ describe('validateMove tests', () => {
     });
     
     test("The function returns true for an empty space", () => {
-        expect(validateMove(1, 3, board)).toBeFalsy();
+        expect(validateMove(0, 2, board)).toBeTruthy();
     });
 });
 

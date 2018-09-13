@@ -12,8 +12,5 @@
 
 ## Todo
 
-- Show the final board state on the 'game over' screens
-- Have the computer player look for intelligent moves instead of making random ones
-- Lock out human player while the computer is 'thinking'
+- Have the computer player look ahead for intelligent moves instead of making random ones
 - More descriptive start screen
-- Indicate who the current player is at each move in the UI

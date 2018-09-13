@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import PreGame              from './components/PreGame';
 import GameBoard            from './components/GameBoard';
-import GameOver             from './components/GameOver';
+import Winner               from './components/Winner';
+import Stalemate            from './components/Stalemate';
 import referee              from './referee';
 import computerMove         from './computerMove';
 
@@ -20,7 +21,7 @@ class App extends Component {
     }
 
     getInitialState = () => ({
-        preGame: true,
+        gameState: 'preGame',
         currentPlayer: '',
         board: [
             [null, null, null],
@@ -28,15 +29,19 @@ class App extends Component {
             [null, null, null]
         ],
         moveCount: 1,
-        gameOver: false,
+        isComputerMove: false
     });
 
     setPlayers = event => this.setState({
-        preGame: false,
+        gameState: 'game',
         players: event.target.id
     });
 
     handleMoveClick = event => {
+        if (this.state.isComputerMove) {
+            return;
+        }
+        
         const row    = event.target.attributes.row.value;
         const column = event.target.attributes.column.value;
 
@@ -49,13 +54,20 @@ class App extends Component {
 
         board[row][column] = currentPlayer;
 
-        const gameOver = this.state.moveCount === 9 ? true : referee(board);
+        const winner = referee(board) ? 'postGame' : 'game';
+
+        const stalemate = this.state.moveCount === 9 && winner === 'game';
+
+        const gameState = stalemate ? 'stalemate' : winner;
+
+        const isComputerMove = this.state.players === '1' && currentPlayer === 'x';
 
         this.setState({
             moveCount: this.state.moveCount + 1,
             board,
-            gameOver,
-            currentPlayer
+            gameState,
+            currentPlayer,
+            isComputerMove
         });
     }
 
@@ -64,18 +76,38 @@ class App extends Component {
     );
 
     componentDidUpdate = () => {
-        const followUpMove = !this.state.gameOver ? computerMove(this.state.players, this.state.board, this.state.moveCount) : false;
+        const followUpMove = this.state.gameState === 'game' ? computerMove(this.state.players, this.state.board, this.state.moveCount) : false;
         
         if (followUpMove) {
             setTimeout(() => this.submitMove(followUpMove.row, followUpMove.column), 1500);
         }
     }
 
-    render = () => this.state.preGame ?
-        <PreGame setPlayers={this.setPlayers} /> :
-        this.state.gameOver ?
-            <GameOver moveCount={this.state.moveCount} currentPlayer={this.state.currentPlayer} startOver={this.startOver} /> :
-            <GameBoard state={this.state.board} makeMove={this.handleMoveClick} />;
+    controls = () => {
+        switch (this.state.gameState) {
+            case 'preGame':
+                return <PreGame setPlayers={this.setPlayers} />;
+            case 'postGame':
+                return <Winner currentPlayer={this.state.currentPlayer} startOver={this.startOver} />;
+            case 'stalemate':
+                return <Stalemate startOver={this.startOver} />;
+            default:
+                return <NextMove currentPlayer={this.state.currentPlayer} isComputerMove={this.state.isComputerMove} />;
+        }
+    }
+
+    render = () => (
+        <div>
+            {this.controls()}
+            <GameBoard state={this.state.board} makeMove={this.handleMoveClick} />
+        </div>
+    );
 }
 
 export default App;
+
+const NextMove = ({ currentPlayer, isComputerMove }) => {
+    const nextMove = currentPlayer === 'x' ? 'o' : 'x';
+
+    return <div className="controls">next move: {nextMove} {isComputerMove ? ' (computer)' : ''}</div>
+}

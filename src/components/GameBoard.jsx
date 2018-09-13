@@ -12,6 +12,8 @@ const GameBoard = ({ state, makeMove }) => {
                 return <OPosition />;
             default:
                 return <button 
+                    className="availablePosition"
+                    key={rowIndex + columnIndex}
                     onClick={makeMove}
                     row={rowIndex}
                     column={columnIndex}
