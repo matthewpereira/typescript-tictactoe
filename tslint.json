@@ -1,0 +1,43 @@
+{
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "jsRules": {
+    "check-format": ["allow-snake-case"],
+    "no-console": [false],
+    "object-literal-sort-keys": [false]
+  },
+  "rules": {
+    "array-type": ["generic"],
+    "no-consecutive-blank-lines": false,
+    "variable-name": [true, "check-format", "allow-pascal-case", "allow-snake-case"],
+    "arrow-parens": [false],
+    "curly": [false],
+    "indent": [true, "spaces", 4],
+    "import-spacing": false,
+    "interface-name": [false, "always-prefix"],
+    "max-line-length": [false],
+    "member-access": [false],
+    "member-ordering": [false],
+    "no-console": [false],
+    "no-bitwise": false,
+    "no-debugger": true,
+    "no-empty-interface": [false],
+    "no-unused-expression": [false],
+    "no-var-requires": false,
+    "ordered-imports": [false],
+    "object-literal-sort-keys": [false],
+    "only-arrow-functions": [false],
+    "prefer-const": [true],
+    "prefer-for-of": false,
+    "quotemark": [true, "single", "jsx-double"],
+    "semicolon": [true, "always", "ignore-interfaces"],
+    "space-before-function-paren": [false],
+    "trailing-comma": [false]
+  },
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  }
+}

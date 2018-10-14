@@ -32,7 +32,7 @@ describe('computerMove tests', () => {
     });
     
     test("The function returns a real move for an one player game", () => {
-        const move = computerMove('1', board);
+        const move = computerMove(1, board);
 
         const valid = move.row === 0 && move.column === 2;
         

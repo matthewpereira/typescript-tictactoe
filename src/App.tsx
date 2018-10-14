@@ -1,16 +1,20 @@
+// tslint:disable:no-console
 import React, { Component } from 'react';
 
-import PreGame              from './components/PreGame';
 import GameBoard            from './components/GameBoard';
-import Winner               from './components/Winner';
+import PreGame              from './components/PreGame';
 import Stalemate            from './components/Stalemate';
-import referee              from './referee';
+import Winner               from './components/Winner';
+
 import computerMove         from './computerMove';
+import referee              from './referee';
+
+import { AppState }         from './types';
 
 import './App.css';
 
-class App extends Component {
-    constructor(props) {
+class App extends Component<{}, AppState> {
+    constructor(props: {}) {
         super(props);
 
         this.state = this.getInitialState();
@@ -21,34 +25,35 @@ class App extends Component {
     }
 
     getInitialState = () => ({
-        gameState: 'preGame',
-        currentPlayer: '',
         board: [
             [null, null, null],
             [null, null, null],
             [null, null, null]
         ],
+        currentPlayer: '',
+        gameState: 'preGame',
+        isComputerMove: false,
         moveCount: 1,
-        isComputerMove: false
-    });
+        players: 0,
+    })
 
-    setPlayers = event => this.setState({
+    setPlayers = (event: React.MouseEvent<HTMLElement>) => this.setState({
         gameState: 'game',
-        players: event.target.id
-    });
+        players: parseInt((event.target as any).id, 10)
+    })
 
-    handleMoveClick = event => {
+    handleMoveClick = (event: React.MouseEvent<HTMLElement>) => {
         if (this.state.isComputerMove) {
             return;
         }
-        
-        const row    = event.target.attributes.row.value;
-        const column = event.target.attributes.column.value;
+
+        const column = (event.target as any).attributes.getNamedItem('data-column').value;
+        const row    = (event.target as any).attributes.getNamedItem('data-row').value;
 
         this.submitMove(row, column);
     }
 
-    submitMove = (row, column) => {
+    submitMove = (row: number, column: number) => {
         const currentPlayer = this.state.moveCount % 2 ? 'x' : 'o';
         const board = this.state.board.slice(0);
 
@@ -60,8 +65,10 @@ class App extends Component {
 
         const gameState = stalemate ? 'stalemate' : winner;
 
-        const isComputerMove = this.state.players === '1' && currentPlayer === 'x';
+        const isComputerMove = this.state.players === 1 && currentPlayer === 'x';
 
+        console.log(isComputerMove);
+        
         this.setState({
             moveCount: this.state.moveCount + 1,
             board,
@@ -73,7 +80,7 @@ class App extends Component {
 
     startOver = () => (
         this.setState(this.getInitialState())
-    );
+    )
 
     componentDidUpdate = () => {
         const followUpMove = this.state.gameState === 'game' ? computerMove(this.state.players, this.state.board, this.state.moveCount) : false;
@@ -99,15 +106,20 @@ class App extends Component {
     render = () => (
         <div>
             {this.controls()}
-            <GameBoard state={this.state.board} makeMove={this.handleMoveClick} />
+            <GameBoard boardState={this.state.board} makeMove={this.handleMoveClick} />
         </div>
-    );
+    )
 }
 
 export default App;
 
-const NextMove = ({ currentPlayer, isComputerMove }) => {
+interface NextMove {
+    currentPlayer: string, 
+    isComputerMove: boolean
+}
+
+const NextMove = ({ currentPlayer, isComputerMove}: NextMove) => {
     const nextMove = currentPlayer === 'x' ? 'o' : 'x';
 
-    return <div className="controls">next move: {nextMove} {isComputerMove ? ' (computer)' : ''}</div>
-}
+    return <div className="controls">next move: {nextMove} {isComputerMove ? ' (computer)' : ''}</div>;
+};

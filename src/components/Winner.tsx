@@ -1,6 +1,11 @@
 import React from 'react';
 
-const Winner = ({ currentPlayer, startOver }) => (
+interface WinnerProps {
+    currentPlayer: string;
+    startOver: (event: React.MouseEvent<HTMLElement>) => void;
+}
+
+const Winner = ({ currentPlayer, startOver }: WinnerProps) => (
     <div className="gameOver">
         <p className="label">Winner!</p>
         <p>Player {currentPlayer.toUpperCase()} is the best. <a onClick={startOver}>Start a new game</a>.</p>
