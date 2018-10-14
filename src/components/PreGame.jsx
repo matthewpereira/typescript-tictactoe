@@ -2,6 +2,7 @@ import React from 'react';
 
 const PreGame = ({ setPlayers }) => (
     <div className="preGame">
+        <h1 className="headline">Tic Tac Toe</h1>
         <p className="label">How many human players?</p> 
         <div>
             <button 
