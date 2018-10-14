@@ -1,8 +1,8 @@
 {
-  "name": "es6-tictactoe",
+  "name": "typescript-tictactoe",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://matthewpereira.github.io/es6-tictactoe/",
+  "homepage": "https://matthewpereira.github.io/typescript-tictactoe/",
   "dependencies": {
     "@types/node": "^10.11.7",
     "@types/react": "^16.4.16",
